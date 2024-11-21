@@ -56,6 +56,7 @@ exclude_patterns = [
     'JAX_basic_text_classification.md',
     'JAX_examples_image_segmentation.md',
     'JAX_Vision_transformer.md',
+    'data_loaders_on_cpu_with_jax.md',
 ]
 
 suppress_warnings = [
@@ -86,4 +87,5 @@ nb_execution_excludepatterns = [
     'JAX_basic_text_classification.ipynb',
     'JAX_examples_image_segmentation.ipynb',
     'JAX_Vision_transformer.ipynb',
+    'data_loaders_on_cpu_with_jax.ipynb',
 ]
