@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.16.4
+    jupytext_version: 1.15.2
 kernelspec:
   display_name: Python 3
   name: python3
@@ -13,9 +13,11 @@ kernelspec:
 
 +++ {"id": "PUFGZggH49zp"}
 
-## Introduction to Data Loaders on CPU with JAX
+# Introduction to Data Loaders on CPU with JAX
 
 +++ {"id": "3ia4PKEV5Dr8"}
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jax-ml/jax-ai-stack/blob/main/docs/data_loaders_on_cpu_with_jax.ipynb)
 
 This tutorial explores different data loading strategies for using **JAX** on a single [**CPU**](https://jax.readthedocs.io/en/latest/glossary.html#term-CPU). While JAX doesn't include a built-in data loader, it seamlessly integrates with popular data loading libraries, including:
 *   [**PyTorch DataLoader**](https://github.com/pytorch/data)
@@ -188,7 +190,7 @@ def train_model(num_epochs, params, training_generator, data_loader_type='stream
 
 +++ {"id": "Hsionp5IYsQ9"}
 
-## Loading Data with PyTorch DataLoader
+### Loading Data with PyTorch DataLoader
 
 This section shows how to load the MNIST dataset using PyTorch's DataLoader, convert the data to NumPy arrays, and apply transformations to flatten and cast images.
 
@@ -318,7 +320,7 @@ train_model(num_epochs, params, pytorch_training_generator(mnist_dataset), data_
 
 +++ {"id": "Nm45ZTo6yrf5"}
 
-## Loading Data with TensorFlow Datasets (TFDS)
+### Loading Data with TensorFlow Datasets (TFDS)
 
 This section demonstrates how to load the MNIST dataset using TFDS, fetch the full dataset for evaluation, and define a training generator for batch processing. GPU usage is explicitly disabled for TensorFlow.
 
@@ -413,7 +415,7 @@ train_model(num_epochs, params, training_generator)
 
 +++ {"id": "-ryVkrAITS9Z"}
 
-## Loading Data with Grain
+### Loading Data with Grain
 
 This section demonstrates how to load MNIST data using Grain, a data-loading library. You'll define a custom dataset class for Grain and set up a Grain DataLoader for efficient training.
 
@@ -547,7 +549,7 @@ train_model(num_epochs, params, pygrain_training_generator)
 
 +++ {"id": "oixvOI816qUn"}
 
-## Loading Data with Hugging Face
+### Loading Data with Hugging Face
 
 This section demonstrates loading MNIST data using the Hugging Face `datasets` library. You'll format the dataset for JAX compatibility, prepare flattened images and one-hot-encoded labels, and define a training generator.
 
