@@ -13,9 +13,11 @@ kernelspec:
 
 +++ {"id": "PUFGZggH49zp"}
 
-## Introduction to Data Loaders for Multi-Device Training with JAX
+# Introduction to Data Loaders for Multi-Device Training with JAX
 
 +++ {"id": "3ia4PKEV5Dr8"}
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jax-ml/jax-ai-stack/blob/main/docs/data_loaders_for_multi_device_setups_with_jax.ipynb)
 
 This tutorial explores various data loading strategies for **JAX** in **multi-device distributed** environments, leveraging [**TPUs**](https://jax.readthedocs.io/en/latest/pallas/tpu/details.html#what-is-a-tpu). While JAX doesn't include a built-in data loader, it seamlessly integrates with popular data loading libraries, including:
 *   [**PyTorch DataLoader**](https://github.com/pytorch/data)
@@ -24,6 +26,8 @@ This tutorial explores various data loading strategies for **JAX** in **multi-de
 *   [**Hugging Face**](https://huggingface.co/docs/datasets/en/use_with_jax#data-loading)
 
 You'll see how to use each of these libraries to efficiently load data for a simple image classification task using the MNIST dataset.
+
+Building on the [Data Loaders on GPU](https://jax-ai-stack.readthedocs.io/en/latest/data_loaders_on_gpu_with_jax.html) tutorial, this guide introduces optimizations for distributed training across multiple GPUs or TPUs. It focuses on data sharding with `Mesh` and `NamedSharding` to efficiently partition and synchronize data across devices. By leveraging multi-device setups, you'll maximize resource utilization for large datasets in distributed environments.
 
 +++ {"id": "-rsMgVtO6asW"}
 
@@ -40,7 +44,7 @@ from jax.sharding import Mesh, PartitionSpec, NamedSharding
 
 +++ {"id": "TsFdlkSZKp9S"}
 
-**Checking TPU Availability for JAX**
+### Checking TPU Availability for JAX
 
 ```{code-cell}
 ---
@@ -54,7 +58,7 @@ jax.devices()
 
 +++ {"id": "qyJ_WTghDnIc"}
 
-**Setting Hyperparameters and Initializing Parameters**
+### Setting Hyperparameters and Initializing Parameters
 
 You'll define hyperparameters for your model and data loading, including layer sizes, learning rate, batch size, and the data directory. You'll also initialize the weights and biases for a fully-connected neural network.
 
@@ -86,7 +90,7 @@ params = init_network_params(layer_sizes, random.PRNGKey(0))
 
 +++ {"id": "rHLdqeI7D2WZ"}
 
-**Model Prediction with Auto-Batching**
+### Model Prediction with Auto-Batching
 
 In this section, you'll define the `predict` function for your neural network. This function computes the output of the network for a single input image.
 
@@ -135,7 +139,7 @@ sharding_spec = PartitionSpec('device')
 
 +++ {"id": "rLqfeORsERek"}
 
-**Utility and Loss Functions**
+### Utility and Loss Functions
 
 You'll now define utility functions for:
 - One-hot encoding: Converts class indices to binary vectors.
@@ -253,7 +257,7 @@ class FlattenAndCast(object):
 
 +++ {"id": "ec-MHhv6hYsK"}
 
-**Load Dataset with Transformations**
+### Load Dataset with Transformations
 
 Standardize the data by flattening the images, casting them to `float32`, and ensuring consistent data types.
 
@@ -269,7 +273,7 @@ mnist_dataset = MNIST(data_dir, download=True, transform=FlattenAndCast())
 
 +++ {"id": "kbdsqvPZGrsa"}
 
-**Full Training Dataset for Accuracy Checks**
+### Full Training Dataset for Accuracy Checks
 
 Convert the entire training dataset to JAX arrays.
 
@@ -282,7 +286,7 @@ train_labels = one_hot(np.array(mnist_dataset.targets), n_targets)
 
 +++ {"id": "WXUh0BwvG8Ko"}
 
-**Get Full Test Dataset**
+### Get Full Test Dataset
 
 Load and process the full test dataset.
 
@@ -307,7 +311,7 @@ print('Test:', test_images.shape, test_labels.shape)
 
 +++ {"id": "mfSnfJND6I8G"}
 
-**Training Data Generator**
+### Training Data Generator
 
 Define a generator function using PyTorch's DataLoader for batch training.
 Setting `num_workers > 0` enables multi-process data loading, which can accelerate data loading for larger datasets or intensive preprocessing tasks. Experiment with different values to find the optimal setting for your hardware and workload.
@@ -324,7 +328,7 @@ def pytorch_training_generator(mnist_dataset):
 
 +++ {"id": "Xzt2x9S1HC3T"}
 
-**Training Loop (PyTorch DataLoader)**
+### Training Loop (PyTorch DataLoader)
 
 The training loop uses the PyTorch DataLoader to iterate through batches and update model parameters.
 
@@ -367,7 +371,7 @@ import tensorflow_datasets as tfds
 
 +++ {"id": "F6OlzaDqwe4p"}
 
-**Fetch Full Dataset for Evaluation**
+### Fetch Full Dataset for Evaluation
 
 Load the dataset with `tfds.load`, convert it to NumPy arrays, and process it for evaluation.
 
@@ -412,7 +416,7 @@ print('Test:', test_images.shape, test_labels.shape)
 
 +++ {"id": "yy9PunCJdI-G"}
 
-**Define the Training Generator**
+### Define the Training Generator
 
 Create a generator function to yield batches of data for training.
 
@@ -430,7 +434,7 @@ def training_generator():
 
 +++ {"id": "EAWeUdnuFNBY"}
 
-**Training Loop (TFDS)**
+### Training Loop (TFDS)
 
 Use the training generator in a custom training loop.
 
@@ -478,7 +482,7 @@ from torchvision.datasets import MNIST
 
 +++ {"id": "0h6mwVrspPA-"}
 
-**Define Dataset Class**
+### Define Dataset Class
 
 Create a custom dataset class to load MNIST data for Grain.
 
@@ -505,7 +509,7 @@ class Dataset:
 
 +++ {"id": "53mf8bWEsyTr"}
 
-**Initialize the Dataset**
+### Initialize the Dataset
 
 ```{code-cell}
 :id: pN3oF7-ostGE
@@ -515,7 +519,7 @@ mnist_dataset = Dataset(data_dir)
 
 +++ {"id": "GqD-ycgBuwv9"}
 
-**Get the full train and test dataset**
+### Get the full train and test dataset
 
 ```{code-cell}
 :id: f1VnTuX3u_kL
@@ -543,7 +547,7 @@ print("Test:", test_images.shape, test_labels.shape)
 
 +++ {"id": "1QPbXt7O0JN-"}
 
-**Initialize PyGrain DataLoader**
+### Initialize PyGrain DataLoader
 
 ```{code-cell}
 :id: 9RuFTcsCs2Ac
@@ -562,7 +566,7 @@ def pygrain_training_generator():
 
 +++ {"id": "GvpJPHAbeuHW"}
 
-**Training Loop (Grain)**
+### Training Loop (Grain)
 
 Run the training loop using the Grain DataLoader.
 
@@ -638,7 +642,7 @@ mnist_dataset = load_dataset("mnist", cache_dir=data_dir).with_format("numpy")
 
 +++ {"id": "tgI7dIaX7JzM"}
 
-**Extract images and labels**
+### Extract images and labels
 
 Get image shape and flatten for model input.
 
@@ -676,7 +680,7 @@ print('Test:', test_images.shape, test_labels.shape)
 
 +++ {"id": "kk_4zJlz7T1E"}
 
-**Define Training Generator**
+### Define Training Generator
 
 Set up a generator to yield batches of images and labels for training.
 
@@ -692,7 +696,7 @@ def hf_training_generator():
 
 +++ {"id": "HIsGfkLI7dvZ"}
 
-**Training Loop (Hugging Face Datasets)**
+### Training Loop (Hugging Face Datasets)
 
 Run the training loop using the Hugging Face training generator.
 
@@ -708,8 +712,8 @@ train_model(num_epochs, params, hf_training_generator)
 
 +++ {"id": "_JR0V1Aix9Id"}
 
-## **Summary**
+## Summary
 
-This notebook has introduced efficient methods for multi-device distributed data loading on TPUs with JAX. You explored how to leverage popular libraries like PyTorch DataLoader, TensorFlow Datasets, Grain, and Hugging Face Datasets to streamline the data loading process for machine learning tasks. Each method has unique benefits, enabling you to choose the most suitable approach based on your project requirements.
+This notebook has introduced efficient methods for multi-device distributed data loading on TPUs with JAX. You explored how to leverage popular libraries like PyTorch DataLoader, TensorFlow Datasets, Grain, and Hugging Face Datasets to streamline the data loading process for machine learning tasks. Each library offers distinct advantages, allowing you to select the best approach for your specific project needs.
 
-For in-depth strategies on distributed data loading with JAX, including global data pipelines and per-device processing, refer to the [Distributed Data Loading Guide](https://jax.readthedocs.io/en/latest/distributed_data_loading.html).
+For more detailed strategies on distributed data loading with JAX, including global data pipelines and per-device processing, refer to the [Distributed Data Loading Guide](https://jax.readthedocs.io/en/latest/distributed_data_loading.html).
