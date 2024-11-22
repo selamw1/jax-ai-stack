@@ -27,7 +27,7 @@ This tutorial explores different data loading strategies for using **JAX** on a 
 
 You'll see how to use each of these libraries to efficiently load data for a simple image classification task using the MNIST dataset.
 
-Compared to the [Data Loaders on CPU](data_loaders_on_cpu_with_jax.ipynb), working with GPUs introduces opportunities for further optimization, such as transferring data to the GPU using `device_put`, leveraging larger batch sizes for faster processing, and addressing considerations like memory management.
+Compared to the [Data Loaders on CPU](https://jax-ai-stack.readthedocs.io/en/latest/data_loaders_on_cpu_with_jax.html), working with GPUs introduces opportunities for further optimization, such as transferring data to the GPU using `device_put`, leveraging larger batch sizes for faster processing, and addressing considerations like memory management.
 
 +++ {"id": "-rsMgVtO6asW"}
 
