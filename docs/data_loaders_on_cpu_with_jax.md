@@ -29,7 +29,7 @@ You'll see how to use each of these libraries to efficiently load data for a sim
 
 +++ {"id": "pEsb135zE-Jo"}
 
-**Setting JAX to Use CPU Only**
+### Setting JAX to Use CPU Only
 
 First, you'll restrict JAX to use only the CPU, even if a GPU is available. This ensures consistency and allows you to focus on CPU-based data loading.
 
@@ -54,7 +54,7 @@ from jax import random, grad, jit, vmap
 
 +++ {"id": "TsFdlkSZKp9S"}
 
-**CPU Setup Verification**
+### CPU Setup Verification
 
 ```{code-cell}
 ---
@@ -68,7 +68,7 @@ jax.devices()
 
 +++ {"id": "qyJ_WTghDnIc"}
 
-**Setting Hyperparameters and Initializing Parameters**
+### Setting Hyperparameters and Initializing Parameters
 
 You'll define hyperparameters for your model and data loading, including layer sizes, learning rate, batch size, and the data directory. You'll also initialize the weights and biases for a fully-connected neural network.
 
@@ -100,7 +100,7 @@ params = init_network_params(layer_sizes, random.PRNGKey(0))
 
 +++ {"id": "6Ci_CqW7q6XM"}
 
-**Model Prediction with Auto-Batching**
+### Model Prediction with Auto-Batching
 
 In this section, you'll define the `predict` function for your neural network. This function computes the output of the network for a single input image.
 
@@ -115,7 +115,7 @@ def relu(x):
   return jnp.maximum(0, x)
 
 def predict(params, image):
-  # per-example predictions
+  # per-example prediction
   activations = image
   for w, b in params[:-1]:
     outputs = jnp.dot(w, activations) + b
@@ -131,7 +131,7 @@ batched_predict = vmap(predict, in_axes=(None, 0))
 
 +++ {"id": "niTSr34_sDZi"}
 
-**Utility and Loss Functions**
+### Utility and Loss Functions
 
 You'll now define utility functions for:
 - One-hot encoding: Converts class indices to binary vectors.
@@ -190,7 +190,7 @@ def train_model(num_epochs, params, training_generator, data_loader_type='stream
 
 +++ {"id": "Hsionp5IYsQ9"}
 
-### Loading Data with PyTorch DataLoader
+## Loading Data with PyTorch DataLoader
 
 This section shows how to load the MNIST dataset using PyTorch's DataLoader, convert the data to NumPy arrays, and apply transformations to flatten and cast images.
 
@@ -233,7 +233,7 @@ class FlattenAndCast(object):
 
 +++ {"id": "mfSnfJND6I8G"}
 
-**Load Dataset with Transformations**
+### Load Dataset with Transformations
 
 Standardize the data by flattening the images, casting them to `float32`, and ensuring consistent data types.
 
@@ -249,7 +249,7 @@ mnist_dataset = MNIST(data_dir, download=True, transform=FlattenAndCast())
 
 +++ {"id": "kbdsqvPZGrsa"}
 
-**Full Training Dataset for Accuracy Checks**
+### Full Training Dataset for Accuracy Checks
 
 Convert the entire training dataset to JAX arrays.
 
@@ -262,7 +262,7 @@ train_labels = one_hot(np.array(mnist_dataset.targets), n_targets)
 
 +++ {"id": "WXUh0BwvG8Ko"}
 
-**Get Full Test Dataset**
+### Get Full Test Dataset
 
 Load and process the full test dataset.
 
@@ -287,7 +287,7 @@ print('Test:', test_images.shape, test_labels.shape)
 
 +++ {"id": "m3zfxqnMiCbm"}
 
-**Training Data Generator**
+### Training Data Generator
 
 Define a generator function using PyTorch's DataLoader for batch training.
 Setting `num_workers > 0` enables multi-process data loading, which can accelerate data loading for larger datasets or intensive preprocessing tasks. Experiment with different values to find the optimal setting for your hardware and workload.
@@ -304,7 +304,7 @@ def pytorch_training_generator(mnist_dataset):
 
 +++ {"id": "Xzt2x9S1HC3T"}
 
-**Training Loop (PyTorch DataLoader)**
+### Training Loop (PyTorch DataLoader)
 
 The training loop uses the PyTorch DataLoader to iterate through batches and update model parameters.
 
@@ -320,7 +320,7 @@ train_model(num_epochs, params, pytorch_training_generator(mnist_dataset), data_
 
 +++ {"id": "Nm45ZTo6yrf5"}
 
-### Loading Data with TensorFlow Datasets (TFDS)
+## Loading Data with TensorFlow Datasets (TFDS)
 
 This section demonstrates how to load the MNIST dataset using TFDS, fetch the full dataset for evaluation, and define a training generator for batch processing. GPU usage is explicitly disabled for TensorFlow.
 
@@ -336,7 +336,7 @@ tf.config.set_visible_devices([], device_type='GPU')
 
 +++ {"id": "3xdQY7H6wr3n"}
 
-**Fetch Full Dataset for Evaluation**
+### Fetch Full Dataset for Evaluation
 
 Load the dataset with `tfds.load`, convert it to NumPy arrays, and process it for evaluation.
 
@@ -381,7 +381,7 @@ print('Test:', test_images.shape, test_labels.shape)
 
 +++ {"id": "UWRSaalfdyDX"}
 
-**Define the Training Generator**
+### Define the Training Generator
 
 Create a generator function to yield batches of data for training.
 
@@ -399,7 +399,7 @@ def training_generator():
 
 +++ {"id": "EAWeUdnuFNBY"}
 
-**Training Loop (TFDS)**
+### Training Loop (TFDS)
 
 Use the training generator in a custom training loop.
 
@@ -415,7 +415,7 @@ train_model(num_epochs, params, training_generator)
 
 +++ {"id": "-ryVkrAITS9Z"}
 
-### Loading Data with Grain
+## Loading Data with Grain
 
 This section demonstrates how to load MNIST data using Grain, a data-loading library. You'll define a custom dataset class for Grain and set up a Grain DataLoader for efficient training.
 
@@ -447,7 +447,7 @@ from torchvision.datasets import MNIST
 
 +++ {"id": "0h6mwVrspPA-"}
 
-**Define Dataset Class**
+### Define Dataset Class
 
 Create a custom dataset class to load MNIST data for Grain.
 
@@ -473,7 +473,7 @@ class Dataset:
 
 +++ {"id": "53mf8bWEsyTr"}
 
-**Initialize the Dataset**
+### Initialize the Dataset
 
 ```{code-cell}
 :id: pN3oF7-ostGE
@@ -483,7 +483,7 @@ mnist_dataset = Dataset(data_dir)
 
 +++ {"id": "GqD-ycgBuwv9"}
 
-**Get the full train and test dataset**
+### Get the full train and test dataset
 
 ```{code-cell}
 :id: f1VnTuX3u_kL
@@ -511,7 +511,7 @@ print("Test:", test_images.shape, test_labels.shape)
 
 +++ {"id": "fETnWRo2crhf"}
 
-**Initialize PyGrain DataLoader**
+### Initialize PyGrain DataLoader
 
 Set up a PyGrain DataLoader for sequential batch sampling.
 
@@ -533,7 +533,7 @@ def pygrain_training_generator():
 
 +++ {"id": "GvpJPHAbeuHW"}
 
-**Training Loop (Grain)**
+### Training Loop (Grain)
 
 Run the training loop using the Grain DataLoader.
 
@@ -549,7 +549,7 @@ train_model(num_epochs, params, pygrain_training_generator)
 
 +++ {"id": "oixvOI816qUn"}
 
-### Loading Data with Hugging Face
+## Loading Data with Hugging Face
 
 This section demonstrates loading MNIST data using the Hugging Face `datasets` library. You'll format the dataset for JAX compatibility, prepare flattened images and one-hot-encoded labels, and define a training generator.
 
@@ -579,7 +579,7 @@ from datasets import load_dataset
 
 +++ {"id": "8Gaj11tO7C86"}
 
-**Load and Format MNIST Dataset**
+### Load and Format MNIST Dataset
 
 Load the MNIST dataset from Hugging Face and format it as `numpy` arrays for quick access or `jax` to get JAX arrays.
 
@@ -615,7 +615,7 @@ mnist_dataset = load_dataset("mnist").with_format("numpy")
 
 +++ {"id": "IFjTyGxY19b0"}
 
-**Extract images and labels**
+### Extract images and labels
 
 Get image shape and flatten for model input
 
@@ -647,7 +647,7 @@ print('Test:', test_images.shape, test_labels.shape)
 
 +++ {"id": "kk_4zJlz7T1E"}
 
-**Define Training Generator**
+### Define Training Generator
 
 Set up a generator to yield batches of images and labels for training.
 
@@ -663,7 +663,7 @@ def hf_training_generator():
 
 +++ {"id": "HIsGfkLI7dvZ"}
 
-**Training Loop (Hugging Face Datasets)**
+### Training Loop (Hugging Face Datasets)
 
 Run the training loop using the Hugging Face training generator.
 
@@ -679,6 +679,6 @@ train_model(num_epochs, params, hf_training_generator)
 
 +++ {"id": "qXylIOwidWI3"}
 
-## **Summary**
+## Summary
 
 This notebook has guided you through efficient methods for loading data on a CPU when using JAX. You’ve learned how to leverage popular libraries such as PyTorch DataLoader, TensorFlow Datasets, Grain, and Hugging Face Datasets to streamline the data loading process for your machine learning tasks. Each of these methods offers unique advantages and considerations, allowing you to choose the best approach based on the specific needs of your project.
