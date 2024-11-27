@@ -20,10 +20,11 @@ kernelspec:
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jax-ml/jax-ai-stack/blob/main/docs/data_loaders_on_cpu_with_jax.ipynb)
 
 This tutorial explores different data loading strategies for using **JAX** on a single [**CPU**](https://jax.readthedocs.io/en/latest/glossary.html#term-CPU). While JAX doesn't include a built-in data loader, it seamlessly integrates with popular data loading libraries, including:
-*   [**PyTorch DataLoader**](https://github.com/pytorch/data)
-*   [**TensorFlow Datasets (TFDS)**](https://github.com/tensorflow/datasets)
-*   [**Grain**](https://github.com/google/grain)
-*   [**Hugging Face**](https://huggingface.co/docs/datasets/en/use_with_jax#data-loading)
+
+- [**PyTorch DataLoader**](https://github.com/pytorch/data)
+- [**TensorFlow Datasets (TFDS)**](https://github.com/tensorflow/datasets)
+- [**Grain**](https://github.com/google/grain)
+- [**Hugging Face**](https://huggingface.co/docs/datasets/en/use_with_jax#data-loading)
 
 You'll see how to use each of these libraries to efficiently load data for a simple image classification task using the MNIST dataset.
 
@@ -134,11 +135,13 @@ batched_predict = vmap(predict, in_axes=(None, 0))
 ### Utility and Loss Functions
 
 You'll now define utility functions for:
+
 - One-hot encoding: Converts class indices to binary vectors.
 - Accuracy calculation: Measures the performance of the model on the dataset.
 - Loss computation: Calculates the difference between predictions and targets.
 
 To optimize performance:
+
 - [`grad`](https://jax.readthedocs.io/en/latest/_autosummary/jax.grad.html#jax.grad) is used to compute gradients of the loss function with respect to network parameters.
 - [`jit`](https://jax.readthedocs.io/en/latest/_autosummary/jax.jit.html#jax.jit) compiles the update function, enabling faster execution by leveraging JAX's [XLA](https://openxla.org/xla) compilation.
 
@@ -289,11 +292,9 @@ print('Test:', test_images.shape, test_labels.shape)
 
 ### Training Data Generator
 
-Define a generator function using PyTorch's DataLoader for batch training.
-Setting `num_workers > 0` enables multi-process data loading, which can accelerate data loading for larger datasets or intensive preprocessing tasks. Experiment with different values to find the optimal setting for your hardware and workload.
+Define a generator function using PyTorch's DataLoader for batch training. Setting `num_workers > 0` enables multi-process data loading, which can accelerate data loading for larger datasets or intensive preprocessing tasks. Experiment with different values to find the optimal setting for your hardware and workload.
 
-Note: When setting `num_workers > 0`, you may see the following `RuntimeWarning: os.fork() was called. os.fork() is incompatible with multithreaded code, and JAX is multithreaded, so this will likely lead to a deadlock.`
-This warning can be safely ignored since data loaders do not use JAX within the forked processes.
+Note: When setting `num_workers > 0`, you may see the following `RuntimeWarning: os.fork() was called. os.fork() is incompatible with multithreaded code, and JAX is multithreaded, so this will likely lead to a deadlock.` This warning can be safely ignored since data loaders do not use JAX within the forked processes.
 
 ```{code-cell}
 :id: B-fES82EiL6Z
