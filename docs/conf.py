@@ -88,4 +88,6 @@ nb_execution_excludepatterns = [
     'JAX_basic_text_classification.ipynb',
     'JAX_examples_image_segmentation.ipynb',
     'JAX_Vision_transformer.ipynb',
+    'JAX_machine_translation.ipynb',
+    'data_loaders_on_cpu_with_jax.ipynb',
 ]
