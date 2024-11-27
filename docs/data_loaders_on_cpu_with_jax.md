@@ -30,7 +30,7 @@ You'll see how to use each of these libraries to efficiently load data for a sim
 
 +++ {"id": "pEsb135zE-Jo"}
 
-### Setting JAX to Use CPU Only
+## Setting JAX to Use CPU Only
 
 First, you'll restrict JAX to use only the CPU, even if a GPU is available. This ensures consistency and allows you to focus on CPU-based data loading.
 
@@ -69,7 +69,7 @@ jax.devices()
 
 +++ {"id": "qyJ_WTghDnIc"}
 
-### Setting Hyperparameters and Initializing Parameters
+## Setting Hyperparameters and Initializing Parameters
 
 You'll define hyperparameters for your model and data loading, including layer sizes, learning rate, batch size, and the data directory. You'll also initialize the weights and biases for a fully-connected neural network.
 
@@ -101,7 +101,7 @@ params = init_network_params(layer_sizes, random.PRNGKey(0))
 
 +++ {"id": "6Ci_CqW7q6XM"}
 
-### Model Prediction with Auto-Batching
+## Model Prediction with Auto-Batching
 
 In this section, you'll define the `predict` function for your neural network. This function computes the output of the network for a single input image.
 
@@ -132,7 +132,7 @@ batched_predict = vmap(predict, in_axes=(None, 0))
 
 +++ {"id": "niTSr34_sDZi"}
 
-### Utility and Loss Functions
+## Utility and Loss Functions
 
 You'll now define utility functions for:
 
