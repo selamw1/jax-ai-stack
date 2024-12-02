@@ -62,6 +62,7 @@ exclude_patterns = [
 
 suppress_warnings = [
     'misc.highlighting_failure',  # Suppress warning in exception in digits_vae
+    'mystnb.unknown_mime_type',  # Suppress warning for unknown mime type (e.g. colab-display-data+json)
 ]
 
 # -- Options for myst ----------------------------------------------
